@@ -1,5 +1,3 @@
-
-
 # -*- coding: utf-8 -*-
 """
 TRABALHO INTELIGENCIA ARTIFICIAL - PROBLEMA DO JOGO DOS JARROS
@@ -14,51 +12,55 @@ Doscente: Saulo Moraes
 
 import numpy as np
 
-"""
-class Estado:  #nós do grafo
-    def __init__(self, id):
-        self.id = id
-        #colocar outros atributos
-        
-    def getId(self):
-        return self.id
-    
-    def setId(self, id):
-        self.id = id
-                
-class Transicao:  #arestas do grafo
-    def __init__(self, id):
-        self.id = id
-        
-    def getId(self):
-        return self.id
 
-    def setId(self, id):
-        self.id = id
+class No:  #nós do grafo
+    def __init__(self, v):
+        self.vetorJarros = v
+
+    def getVetorJarros(self):
+        return self.vetorJarros
+    
+    def setVetorJarros(self, index, q):
+        self.vetorJarros[index] = q
+                
+                
+class Aresta:  #arestas do grafo
+    def __init__(self, o, d):
+        self.origem = o
+        self.destino = d
+    
+    def getOrigem(self):
+        return self.origem
+    
+    def setOrigem(self, n):
+        self.origem = n
+    
+    def getDestino(self):
+        return self.destino
+    
+    def setDestino(self, n):
+        self.destino = n
 
 class Grafo(): #grafo
     def __init__(self):
         self.nos = []
         self.arestas = []
         
-    def buscarNo(self, id):
+    def verificaSeExiste(self, x):
         for i in self.nos:
-            if id == i.getId():
-                return i
-            
-    def buscarArestas(self, id):
-        for i in self.arestas:
-            if id == i.getId():
-                return i
-    
-    def criarNo(self, id):
-        if self.buscarNo(id) is None:
-            self.nos.append(Estado(id))
-            
-    def criarAresta(self, id):
-        if self.buscarAresta(id) is None:
-            self.arestas.append(Transicao(id))
-"""
+            if i.getVetorJarros() == x :
+                return True
+            return False
+                
+    def inserirNoNaSolucao(self, x):
+        if self.verificaSeExiste(x):
+            exit()
+        else:
+            n = No(x)
+            self.nos.append(n)
+            a = Aresta(self.nos[-1], n)
+            self.arestas.append(a)
+
 
 class Jarro:
     def __init__(self, c, q):
@@ -123,6 +125,42 @@ class Jarro:
             self.vizinhoDireita.recebeAgua(self.quantidadeAtual)
             self.setQuantidadeAtual(0)
 
+#-------------------------------------------------------------------------------------------------------------
+#ALGORITMOS
+
+#BACKTRACKING
+def backtracking(vetorJ):    
+    #instanciando grafo de estados
+    grafoDeEstados = Grafo()
+    vetorSolucao = []
+
+    vetorDeJarros = vetorJ
+
+    grafoDeEstados.inserirNoNaSolucao(vetorDeJarros)
+    sucesso = False
+    fracasso = False
+    i = 0
+    while(sucesso == False and fracasso == False):
+        #ESTRATEGIA DE CONTROLE
+        #1º -> ENCHE O PRIMEIRO JARRO DISPONIVEL   
+        #2º -> ESVAZIA O PRIMEIRO JARRO DISPONIVEL                    
+        #3º -> TRANSFERE PRA ESQUERDA DO PRIMEIRO JARRO DISPONIVEL
+        #4º -> TRANSFERE PRA DIREITA DO PRIMEIRO JARRO DISPONIVEL
+
+        #SOLUÇÃO: O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE
+
+        noAtual = grafoDeEstados.nos[i]
+        #verifica se é solução
+        if (noAtual.getVetorJarros[0].getQuantidadeAtual() == (noAtual.getVetorJarros[0].getCapacidade()/2)):
+            #temos uma solução 
+            #ai ve oq faz aqui
+            print("a")
+        else:
+            print("a")
+            #escolhe o operador de acordo com a estrategia de controle
+            #executa o operador (oq significa criar um novo nó, fazer as alteracoes)
+            #adiciona operador excutado no vetorSolucao
+        
 #--------------------------------------------------------------------------------------------------------------
 #INTERFACE
 print("*INTELIGÊNCIA ARTIFICIAL - PROBLEMA DO JOGOS DOS JARROS*")
@@ -144,13 +182,11 @@ while i < qntdJarros:
 
     vetorJarros.append(Jarro(int(capacidade),0))
     print("Vetor de jarros criado com sucesso!")
-
-   
     i=i+1
 
 
-i=0
 #setando os vizinhos dos jarros
+i=0
 while i < qntdJarros:    
     if i == 0:
         vetorJarros[i].setVizinhoEsquerda(vetorJarros[qntdJarros-1])
@@ -161,8 +197,9 @@ while i < qntdJarros:
     else:
         vetorJarros[i].setVizinhoEsquerda(vetorJarros[i-1])
         vetorJarros[i].setVizinhoDireita(vetorJarros[i+1])
-
     i=i+1       
+
+backtracking(vetorJarros)
 
 
 

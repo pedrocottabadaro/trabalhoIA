@@ -28,10 +28,9 @@ class No:  #nós do grafo
     def getVetorJarros(self):
         return self.vetorJarros
     
-    def setVetorJarros(self,vetorDeJarros):
-        self.vetorJarros = vetorDeJarros
-                
-                
+    def setVetorJarros(self,vet):
+        self.vetorJarros = vet
+        
 class Aresta:  #arestas do grafo
     def __init__(self, origem, destino):
         self.estadoOrigem = origem
@@ -51,10 +50,10 @@ class Aresta:  #arestas do grafo
 
 class Grafo(): #grafo
     def __init__(self):
-        self.nos = []
+        self.vetorSolucao = []
         self.noAtual=None
         self.arestas = []
-    
+        self.vetoresFechados=[]
     def getNoAtual(self):
         return self.noAtual
 
@@ -63,34 +62,30 @@ class Grafo(): #grafo
 
     def imprimirSolucao(self):
 
-        for i in self.nos:
+        for i in self.vetorSolucao:
             auxVet=i.getVetorJarros()
             print(str(auxVet[0].getQuantidadeAtual())+"-"+str(auxVet[1].getQuantidadeAtual())+"-"+str(auxVet[2].getQuantidadeAtual()))  
             
     def verificaSeExiste(self, no):
         
-        if(self.nos==[]):
+        if(self.vetorSolucao==[]):
             print("lista vazia")
             return False
 
         #PERCORRE A LISTA DE NOS PARA VERIFICAR SE JA EXISTE UM ESTADO IGUAL
-        for i in self.nos:
-            if(i.getVetorJarros() == no.getVetorJarros()):
-                return True
-
-        return False
-
+        return (no.getVetorJarros() in self.vetoresFechados)
+        
     def inserirNoNaSolucao(self, no):
-        print("entrou funcao inserir no")
+        
         if self.verificaSeExiste(no):
-            print("JA EXISTE")
             exit()
         else:
-            print("NAO EXISTE")
-            self.nos.append(no)
+      
+            self.vetorSolucao.append(no)
             a = Aresta(self.getNoAtual(), no)
             self.arestas.append(a)
             self.setNoAtual(no)
+            self.vetoresFechados.append(no.getVetorJarros())
 
 class Jarro:
     def __init__(self, c, q):
@@ -151,15 +146,16 @@ class Jarro:
 
 #-------------------------------------------------------------------------------------------------------------
 #ALGORITMOS
-
+import copy
 #BACKTRACKING
 def backtracking(vetorJ):    
     #instanciando grafo de estados
     grafoDeEstados = Grafo()
     vetorDeJarros = vetorJ
     
+    noOrigem=No(vetorDeJarros,None)
     #insercao do primeiro estado 0-0-0
-    grafoDeEstados.inserirNoNaSolucao(vetorDeJarros)
+    grafoDeEstados.inserirNoNaSolucao(noOrigem)
     
     sucesso = False
     fracasso = False
@@ -182,20 +178,24 @@ def backtracking(vetorJ):
 
             #verifica condição pra entrar no primeiro operador (ENCHER JARRO)
             if(vetorDeJarros[i].getQuantidadeAtual() != vetorDeJarros[i].getCapacidade()):
+                auxVet = copy.deepcopy(vetorDeJarros)
                 print("entrou p encher jarro")
-                noAux = No(vetorDeJarros, grafoDeEstados.getNoAtual())
-                auxVetJarros = vetorDeJarros
-                auxVetJarros[i].encheJarro()
-                noAux.setVetorJarros(auxVetJarros)
-
-                if (grafoDeEstados.verificaSeExiste(noAux) == False):
-                    print("if de inserir no")
-                    grafoDeEstados.inserirNoNaSolucao(noAux.getVetorJarros())
+                noAux = No(auxVet, grafoDeEstados.getNoAtual())
+             
+                auxJarro = copy.deepcopy(vetorDeJarros[i])
+                auxJarro.encheJarro()
+                noAux.vetorJarros[i]=auxJarro
+            
+                if not (grafoDeEstados.verificaSeExiste(noAux)):
+                   
+                    grafoDeEstados.inserirNoNaSolucao(noAux)
                     vetorDeJarros = noAux.getVetorJarros()
+                    grafoDeEstados.imprimirSolucao()
 
                     #verificar se o nó é solução
                     break
-     
+        break
+    sucesso=True
 #--------------------------------------------------------------------------------------------------------------
 #INTERFACE
 print("*INTELIGÊNCIA ARTIFICIAL - PROBLEMA DO JOGOS DOS JARROS*")

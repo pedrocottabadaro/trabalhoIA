@@ -14,8 +14,16 @@ import numpy as np
 
 
 class No:  #nós do grafo
-    def __init__(self, v):
+    def __init__(self, v,noPai):
+        
         self.vetorJarros = v
+        self.noPai=noPai
+
+    def getNoPai(self):
+        return self.getNoPai
+
+    def setNoPai(self,noPai):
+        self.noPai=noPai
 
     def getVetorJarros(self):
         return self.vetorJarros
@@ -26,40 +34,62 @@ class No:  #nós do grafo
                 
 class Aresta:  #arestas do grafo
     def __init__(self, o, d):
-        self.origem = o
-        self.destino = d
+        self.estadoOrigem = o
+        self.estadoDestino = d
     
     def getOrigem(self):
-        return self.origem
+        return self.estadoOrigem
     
     def setOrigem(self, n):
-        self.origem = n
+        self.estadoOrigem = n
     
     def getDestino(self):
-        return self.destino
+        return self.estadoDestino
     
     def setDestino(self, n):
-        self.destino = n
+        self.estadoDestino = n
 
 class Grafo(): #grafo
     def __init__(self):
         self.nos = []
+        self.noAtual=None
         self.arestas = []
-        
+    
+    def getNoAtual(self):
+        return self.noAtual
+
+    def setNoAtual(self,no):
+        self.noAtual=no
+
     def verificaSeExiste(self, x):
-        for i in self.nos:
-            if i.getVetorJarros() == x :
-                return True
+
+        if(self.nos==[]):
             return False
-                
+
+        for i in self.nos:
+            auxVet=i.getVetorJarros()
+            for y in range(len(auxVet)):
+               
+                if(auxVet[y].getQuantidadeAtual()!=x[y].getQuantidadeAtual()):
+                    return False  
+          
+
+        return True
+
     def inserirNoNaSolucao(self, x):
+        print("entrou funcao inserir no")
         if self.verificaSeExiste(x):
+            print("JA EXISTE")
             exit()
         else:
-            n = No(x)
+            print("NAO EXISTE")
+            n = No(x,self.getNoAtual())
             self.nos.append(n)
-            a = Aresta(self.nos[-1], n)
+            a = Aresta(self.getNoAtual(), n)
             self.arestas.append(a)
+            self.setNoAtual(n)
+            
+           
 
 
 class Jarro:
@@ -86,12 +116,6 @@ class Jarro:
 
     def getQuantidadeAtual(self):
         return self.quantidadeAtual
-
-    def getId(self):
-        return self.id
-
-    def setId(self, id):
-        self.id = id
 
     def setCapacidade(self, c):
         self.capacidade = c
@@ -130,33 +154,44 @@ class Jarro:
 
 #BACKTRACKING
 def backtracking(vetorJ):    
+  
     #instanciando grafo de estados
     grafoDeEstados = Grafo()
-    vetorSolucao = []
-
+    
     vetorDeJarros = vetorJ
 
+    opcao=0
+
     grafoDeEstados.inserirNoNaSolucao(vetorDeJarros)
+    
     sucesso = False
     fracasso = False
     i = 0
+    jarroAtual=0
+  
     while(sucesso == False and fracasso == False):
+        print("entrou")
+
+        sucesso=True
         #ESTRATEGIA DE CONTROLE
-        #1º -> ENCHE O PRIMEIRO JARRO DISPONIVEL   
-        #2º -> ESVAZIA O PRIMEIRO JARRO DISPONIVEL                    
-        #3º -> TRANSFERE PRA ESQUERDA DO PRIMEIRO JARRO DISPONIVEL
-        #4º -> TRANSFERE PRA DIREITA DO PRIMEIRO JARRO DISPONIVEL
+        #0º -> ENCHE O PRIMEIRO JARRO DISPONIVEL   
+        #1º -> ESVAZIA O PRIMEIRO JARRO DISPONIVEL                    
+        #2º -> TRANSFERE PRA ESQUERDA DO PRIMEIRO JARRO DISPONIVEL
+        #3º -> TRANSFERE PRA DIREITA DO PRIMEIRO JARRO DISPONIVEL
 
         #SOLUÇÃO: O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE
 
-        noAtual = grafoDeEstados.nos[i]
+      
         #verifica se é solução
-        if (noAtual.getVetorJarros[0].getQuantidadeAtual() == (noAtual.getVetorJarros[0].getCapacidade()/2)):
+       
             #temos uma solução 
             #ai ve oq faz aqui
-            print("a")
-        else:
-            print("a")
+          
+       
+            #escolhe uma opcao, verifica se o estado dessa opcao ja existe, se existir pula para a outra opcao.
+            #Se nao existir,cria um novo com esse novo estado e bota ele na solucao,depois apontar o no atual para esse novo NO
+          
+               
             #escolhe o operador de acordo com a estrategia de controle
             #executa o operador (oq significa criar um novo nó, fazer as alteracoes)
             #adiciona operador excutado no vetorSolucao
@@ -198,6 +233,7 @@ while i < qntdJarros:
         vetorJarros[i].setVizinhoEsquerda(vetorJarros[i-1])
         vetorJarros[i].setVizinhoDireita(vetorJarros[i+1])
     i=i+1       
+
 
 backtracking(vetorJarros)
 

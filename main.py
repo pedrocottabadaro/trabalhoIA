@@ -14,9 +14,9 @@ import numpy as np
 
 
 class No:  #nós do grafo
-    def __init__(self, v,noPai):
+    def __init__(self, vetorDeJarros,noPai):
         
-        self.vetorJarros = v
+        self.vetorJarros = vetorDeJarros
         self.noPai=noPai
 
     def getNoPai(self):
@@ -28,14 +28,14 @@ class No:  #nós do grafo
     def getVetorJarros(self):
         return self.vetorJarros
     
-    def setVetorJarros(self, index, q):
-        self.vetorJarros[index] = q
+    def setVetorJarros(self,vetorDeJarros):
+        self.vetorJarros = vetorDeJarros
                 
                 
 class Aresta:  #arestas do grafo
-    def __init__(self, o, d):
-        self.estadoOrigem = o
-        self.estadoDestino = d
+    def __init__(self, origem, destino):
+        self.estadoOrigem = origem
+        self.estadoDestino = destino
     
     def getOrigem(self):
         return self.estadoOrigem
@@ -61,16 +61,24 @@ class Grafo(): #grafo
     def setNoAtual(self,no):
         self.noAtual=no
 
-    def verificaSeExiste(self, x):
-
-        if(self.nos==[]):
-            return False
+    def imprimirSolucao(self):
 
         for i in self.nos:
             auxVet=i.getVetorJarros()
+            print(str(auxVet[0].getQuantidadeAtual())+"-"+str(auxVet[1].getQuantidadeAtual())+"-"+str(auxVet[2].getQuantidadeAtual()))  
+            
+    def verificaSeExiste(self, vetorDeJarros):
+        
+        if(self.nos==[]):
+            print("lista vazia")
+            return False
+
+        #PERCORRE A LISTA DE NOS PARA VERIFICAR SE JA EXISTE UM ESTADO IGUAL
+        for i in self.nos:
+            auxVet=i.getVetorJarros()
+            #VERIFICA JARRO POR JARRO A SUA QUANTIDADE
             for y in range(len(auxVet)):
-               
-                if(auxVet[y].getQuantidadeAtual()!=x[y].getQuantidadeAtual()):
+                if(auxVet[y].getQuantidadeAtual()!=vetorDeJarros[y].getQuantidadeAtual()):
                     return False  
           
 
@@ -159,29 +167,62 @@ def backtracking(vetorJ):
     grafoDeEstados = Grafo()
     
     vetorDeJarros = vetorJ
-
-    opcao=0
-
+    
+    #insercao do primeiro estado 0-0-0
     grafoDeEstados.inserirNoNaSolucao(vetorDeJarros)
+    
     
     sucesso = False
     fracasso = False
-    i = 0
-    jarroAtual=0
-  
+    
+    if(vetorDeJarros[0].getCapacidade()%2==0):
+        objetivoPrimeiroJarro=vetorDeJarros[0].getCapacidade()/2
+    else:
+        objetivoPrimeiroJarro=((vetorDeJarros[0].getCapacidade()+1)/2)
+
+    
+    
+    print(objetivoPrimeiroJarro)
     while(sucesso == False and fracasso == False):
-        print("entrou")
+        
+        #ESTRATEGIA DE CONTROLE
+        #0º -> ENCHE O JARRO    
+        #1º -> ESVAZIA O  JARRO                     
+        #2º -> TRANSFERE PRA ESQUERDA DO JARRO 
+        #3º -> TRANSFERE PRA DIREITA DO JARRO 
+
+        #SOLUÇÃO: O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE SE FOR PAR
+        #O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE +1 SE FOR IMPAR
+        for i in range(len(vetorDeJarros)):
+
+            ##verifica se aplica a primeira operacao (ENCHER JARRO)
+            if(vetorDeJarros[i].getQuantidadeAtual()!=vetorDeJarros[i].getCapacidade()):
+                print("primeira opcao")
+                noAux=No(vetorDeJarros,grafoDeEstados.getNoAtual())
+                auxVetJarros=noAux.getVetorJarros()
+                auxVetJarros[i].encheJarro()
+                noAux.setVetorJarros(auxVetJarros)
+                print("auxvetjarros")
+                print(auxVetJarros[i].getQuantidadeAtual())
+                if (grafoDeEstados.verificaSeExiste(auxVetJarros)==False):
+                    print("if de inserir no")
+                    grafoDeEstados.inserirNoNaSolucao(noAux.getVetorJarros())
+                    grafoDeEstados.imprimirSolucao()
+                    vetorDeJarros=noAux.getVetorJarros()
+                    break
+
+            break       
+          
+
+
 
         sucesso=True
-        #ESTRATEGIA DE CONTROLE
-        #0º -> ENCHE O PRIMEIRO JARRO DISPONIVEL   
-        #1º -> ESVAZIA O PRIMEIRO JARRO DISPONIVEL                    
-        #2º -> TRANSFERE PRA ESQUERDA DO PRIMEIRO JARRO DISPONIVEL
-        #3º -> TRANSFERE PRA DIREITA DO PRIMEIRO JARRO DISPONIVEL
 
-        #SOLUÇÃO: O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE
 
-      
+                
+        
+
+        
         #verifica se é solução
        
             #temos uma solução 
@@ -195,7 +236,7 @@ def backtracking(vetorJ):
             #escolhe o operador de acordo com a estrategia de controle
             #executa o operador (oq significa criar um novo nó, fazer as alteracoes)
             #adiciona operador excutado no vetorSolucao
-        
+     
 #--------------------------------------------------------------------------------------------------------------
 #INTERFACE
 print("*INTELIGÊNCIA ARTIFICIAL - PROBLEMA DO JOGOS DOS JARROS*")

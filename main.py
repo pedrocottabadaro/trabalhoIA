@@ -165,7 +165,7 @@ def backtracking(vetorJ):
         objetivoPrimeiroJarro=vetorDeJarros[0].getCapacidade()/2
     else:
         objetivoPrimeiroJarro=((vetorDeJarros[0].getCapacidade()+1)/2)
-
+ 
     while(sucesso == False and fracasso == False):
         #ESTRATEGIA DE CONTROLE
         #0º -> ENCHE O JARRO    
@@ -174,20 +174,106 @@ def backtracking(vetorJ):
         #3º -> TRANSFERE PRA DIREITA DO JARRO 
         #SOLUÇÃO: O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE SE FOR PAR
         #O PRIMEIRO JARRO DEVE TER METADE DE SUA CAPACIDADE +1 SE FOR IMPAR 
+    
         for i in range(len(vetorDeJarros)):
+            
+            ##Se for o ultimo indice do vetor, a direita dele é o indice 0
+            if(i==(len(vetorDeJarros)-1)):
+                indiceDireita=0
+            else:
+                indiceDireita=i+1
 
-            #verifica condição pra entrar no primeiro operador (ENCHER JARRO)
+           
+            ###verifica condição pra entrar no primeiro operador (ENCHER JARRO)
             if(vetorDeJarros[i].getQuantidadeAtual() != vetorDeJarros[i].getCapacidade()):
+                #Fazer copia do vetorDeJarros do no atual
                 auxVet = copy.deepcopy(vetorDeJarros)
                 print("entrou p encher jarro")
+                ##criar o no auxiliar
                 noAux = No(auxVet, grafoDeEstados.getNoAtual())
-             
+                #Copiar o jarro que irá sofrer modificacao
                 auxJarro = copy.deepcopy(vetorDeJarros[i])
+                #Operacao
                 auxJarro.encheJarro()
                 noAux.vetorJarros[i]=auxJarro
             
+            ###Verifica se existe o estado. Se existir, botar no grafo.
                 if not (grafoDeEstados.verificaSeExiste(noAux)):
                    
+                    grafoDeEstados.inserirNoNaSolucao(noAux)
+                    vetorDeJarros = noAux.getVetorJarros()
+                    grafoDeEstados.imprimirSolucao()
+
+                    #verificar se o nó é solução
+                    break
+
+
+            ## verifica condição pra entrar no segundo operador (ESVAZIAR JARRO)
+            elif(vetorDeJarros[i].getQuantidadeAtual() != 0):
+                #Fazer copia do vetorDeJarros do no atual
+                auxVet = copy.deepcopy(vetorDeJarros)
+                print("entrou p esvaziar jarro")
+                ##criar o no auxiliar
+                noAux = No(auxVet, grafoDeEstados.getNoAtual())
+                #Copiar o jarro que irá sofrer modificacao
+                auxJarro = copy.deepcopy(vetorDeJarros[i])
+                #Operacao
+                auxJarro.esvaziaJarro()
+                noAux.vetorJarros[i]=auxJarro
+
+                ###Verifica se existe o estado. Se existir, botar no grafo.
+                if not (grafoDeEstados.verificaSeExiste(noAux)):
+                   
+                    grafoDeEstados.inserirNoNaSolucao(noAux)
+                    vetorDeJarros = noAux.getVetorJarros()
+                    grafoDeEstados.imprimirSolucao()
+
+                    #verificar se o nó é solução
+                    break
+
+
+           ##verifica condição pra entrar no Terceiro operador (TRANSFERIR PARA A ESQUERDA)
+            elif(vetorDeJarros[i-1].getQuantidadeAtual() != vetorDeJarros[i-1].getCapacidade()):
+                #Fazer copia do vetorDeJarros do no atual
+                auxVet = copy.deepcopy(vetorDeJarros)
+                print("entrou p transferir jarro ESQUERDA")
+                ##criar o no auxiliar
+                noAux = No(auxVet, grafoDeEstados.getNoAtual())
+                #Copiar o jarro que irá sofrer modificacao
+                auxJarro = copy.deepcopy(vetorDeJarros[i-1])
+                #Operacao
+                auxJarro.setQuantidadeAtual(vetorDeJarros[i].getQuantidadeAtual())
+                noAux.vetorJarros[i-1]=auxJarro
+                noAux.vetorJarros[i].esvaziaJarro()
+
+                ###Verifica se existe o estado. Se existir, botar no grafo.
+                if not (grafoDeEstados.verificaSeExiste(noAux)):
+                    
+                    grafoDeEstados.inserirNoNaSolucao(noAux)
+                    vetorDeJarros = noAux.getVetorJarros()
+                    grafoDeEstados.imprimirSolucao()
+
+                    #verificar se o nó é solução
+                    break
+
+            ##verifica condição pra entrar no Terceiro operador (TRANSFERIR PARA A Direita)    
+            elif(vetorDeJarros[indiceDireita].getQuantidadeAtual() != vetorDeJarros[indiceDireita].getCapacidade()):
+                 #Fazer copia do vetorDeJarros do no atual
+                auxVet = copy.deepcopy(vetorDeJarros)
+                print("entrou p transferir jarro DIREITA")
+                ##criar o no auxiliar
+                noAux = No(auxVet, grafoDeEstados.getNoAtual())
+                #Copiar o jarro que irá sofrer modificacao
+                auxJarro = copy.deepcopy(vetorDeJarros[indiceDireita])
+                #Operacao
+                auxJarro.setQuantidadeAtual(vetorDeJarros[i].getQuantidadeAtual())
+                noAux.vetorJarros[indiceDireita]=auxJarro
+                noAux.vetorJarros[i].esvaziaJarro()
+
+
+                 ###Verifica se existe o estado. Se existir, botar no grafo.
+                if not (grafoDeEstados.verificaSeExiste(noAux)):
+                    
                     grafoDeEstados.inserirNoNaSolucao(noAux)
                     vetorDeJarros = noAux.getVetorJarros()
                     grafoDeEstados.imprimirSolucao()

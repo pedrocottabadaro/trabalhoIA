@@ -10,9 +10,6 @@ Discentes: Davi Rezende
 Doscente: Saulo Moraes
 """
 
-import numpy as np
-
-
 class No:  #nós do grafo
     def __init__(self, vetorDeJarros,noPai):
         
@@ -73,8 +70,10 @@ class Grafo(): #grafo
             print("lista vazia")
             return False
 
-        # for x in self.vetoresFechados:
-        #     print(x)
+        for estado in self.vetoresFechados:
+            if(estado == no.getVetorJarros()): 
+                print(estado[0] + " " + estado[1]  + " " + estado[2])
+                return True
 
         # print(no.getVetorJarros() in self.vetoresFechados)
         #PERCORRE A LISTA DE NOS PARA VERIFICAR SE JA EXISTE UM ESTADO IGUAL
@@ -179,16 +178,8 @@ def backtracking(vetorJ):
     sucesso = False
     fracasso = False
     
-    #PREPARA FORMATO DA SOLUÇÃO
-    if(vetorDeJarros[0].getCapacidade()%2==0):
-        objetivoPrimeiroJarro=vetorDeJarros[0].getCapacidade()/2
-    else:
-        objetivoPrimeiroJarro=((vetorDeJarros[0].getCapacidade()+1)/2)
-    
     i=0
-    while(sucesso == False and fracasso == False):
-        print(i)
-       
+    while(sucesso == False and fracasso == False and i < 3):       
         #ESTRATEGIA DE CONTROLE
         #0º -> ENCHE O JARRO    
         #1º -> ESVAZIA O  JARRO                     
@@ -231,27 +222,27 @@ def backtracking(vetorJ):
                 
 
         ## verifica condição pra entrar no segundo operador (ESVAZIAR JARRO)
-        elif(vetorDeJarros[i].getQuantidadeAtual() != 0):
+        # elif(vetorDeJarros[i].getQuantidadeAtual() != 0):
             
-            auxVet = copy.deepcopy(vetorDeJarros)
-            print("entrou p esvaziar jarro")
+        #     auxVet = copy.deepcopy(vetorDeJarros)
+        #     print("entrou p esvaziar jarro")
             
-            noAux = No(auxVet, grafoDeEstados.getNoAtual())
+        #     noAux = No(auxVet, grafoDeEstados.getNoAtual())
             
-            auxJarro = copy.deepcopy(vetorDeJarros[i])
+        #     auxJarro = copy.deepcopy(vetorDeJarros[i])
         
-            auxJarro.esvaziaJarro()
-            noAux.vetorJarros[i]=auxJarro
+        #     auxJarro.esvaziaJarro()
+        #     noAux.vetorJarros[i]=auxJarro
             
-            if not (grafoDeEstados.verificaSeExiste(noAux)):
-                print("entrou nao existe")
-                grafoDeEstados.inserirNoNaSolucao(noAux)
-                vetorDeJarros = noAux.getVetorJarros()
-                grafoDeEstados.imprimirSolucao()
-                #sucesso=grafoDeEstados.verificaSolucao()
-                i=0
-            else:
-                i=i+1
+        #     if not (grafoDeEstados.verificaSeExiste(noAux)):
+        #         print("entrou nao existe")
+        #         grafoDeEstados.inserirNoNaSolucao(noAux)
+        #         vetorDeJarros = noAux.getVetorJarros()
+        #         grafoDeEstados.imprimirSolucao()
+        #         #sucesso=grafoDeEstados.verificaSolucao()
+        #         i=0
+        #     else:
+        #         i=i+1
         
                 
              

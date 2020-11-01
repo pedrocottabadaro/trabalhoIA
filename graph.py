@@ -59,6 +59,8 @@ class Edge:
         if self._origin is None:
             return f"{self._generating_rule}: |-> {self._destiny.print_node()}"
         return f"{self._generating_rule}: {self._origin.print_node()} -> {self._destiny.print_node()}"
+
+        
 class Node:
     """
     Defines a node which contains a jug array.

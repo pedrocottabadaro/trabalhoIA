@@ -13,14 +13,22 @@ class Graph:
     def __init__(self):
         self._edges = []
         self._vertices = []
-           
-    def is_new_state(self, state):
-        return state in self._closed_states
-           
-    def insert_node(self, node):   
-        if not self.is_new_state(node.get_state()):     
+
+    def get_edges(self):
+        return self._edges
+
+    def get_vertices(self):
+        return self._vertices
+
+    def insert_node(self, node, generating_rule):   
+        if not node in self._vertices:     
             self._vertices.append(node) 
-            self._edges.append(Edge(node.get_parent_node(), node))
+            self._edges.append(Edge(node.get_parent_node(), node, generating_rule))
+
+    def print_graph(self):
+        for edge in self._edges:
+            print(edge.print_edge())
+
 
 class Edge:
     """
@@ -33,22 +41,24 @@ class Edge:
         A reference to an edge object containing a node origin and a node destiny
     """
     
-    def __init__(self, origin, destiny):
+    def __init__(self, origin, destiny, generating_rule):
         self._origin = origin
         self._destiny = destiny
+        self._generating_rule = generating_rule
     
     def get_origin(self):
         return self._origin
     
-    def set_origin(self, n):
-        self._origin = n
-    
     def get_destiny(self):
         return self._destiny
-    
-    def set_destiny(self, n):
-        self._destiny = n
 
+    def get_generating_rule(self):
+        return self._generating_rule
+
+    def print_edge(self):
+        if self._origin is None:
+            return f"{self._generating_rule}: |-> {self._destiny.print_node()}"
+        return f"{self._generating_rule}: {self._origin.print_node()} -> {self._destiny.print_node()}"
 class Node:
     """
     Defines a node which contains a jug array.
@@ -62,10 +72,10 @@ class Node:
         a parent node reference.
     """
     
-    def __init__(self, jug_arr, parent_node):
-        self._jug_arr = jug_arr
+    def __init__(self, parent_node, jug_arr):
         self._parent_node = parent_node
-
+        self._jug_arr = jug_arr
+        
     def get_parent_node(self):
         return self._parent_node
 
@@ -78,5 +88,5 @@ class Node:
     def set_jug_arr(self, jug_arr):
         self._jug_arr = jug_arr
 
-    def get_state(self):
-        self._state = ','.join(_jug_arr)
+    def print_node(self):
+        return [str(j.get_current_volume()) for j in self._jug_arr]

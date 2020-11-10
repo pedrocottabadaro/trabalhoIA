@@ -22,7 +22,6 @@ def main():
 
     n = Node(None, jug_array)
     n2 = Node(n, jug_array_2)
-    n3 = Node(n, jug_array_2)
 
     g = Graph()
     g.insert_node(n,"begin")

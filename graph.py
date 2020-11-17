@@ -103,3 +103,13 @@ class Node:
             self._jug_arr[0].transfer_from(jug)
         else:
             self._jug_arr[jug_pos+1].transfer_from(jug)
+
+    def control_strategy(self, operator, index):
+        if operator == 1:
+            self._jug_arr[index].fill()
+        elif operator == 2:
+            self._jug_arr[index].spill()
+        elif operator == 3:
+            self.transfer_to_left(self._jug_arr[index]) 
+        elif operator == 4:
+            self.transfer_to_right(self._jug_arr[index])

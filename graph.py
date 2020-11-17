@@ -113,3 +113,12 @@ class Node:
             self.transfer_to_left(self._jug_arr[index]) 
         elif operator == 4:
             self.transfer_to_right(self._jug_arr[index])
+
+    def is_solution(self, target_amount):
+        if self._jug_arr is None:
+            return False
+
+        for x in self._jug_arr:
+            if x.get_current_volume() == target_amount:
+                return True
+        return False

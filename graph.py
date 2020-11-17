@@ -57,8 +57,8 @@ class Edge:
 
     def print_edge(self):
         if self._origin is None:
-            return f"{self._generating_rule}: |-> {self._destiny.print_node()}"
-        return f"{self._generating_rule}: {self._origin.print_node()} -> {self._destiny.print_node()}"
+            return f"{self._generating_rule}: |-> {self._destiny.get_node_state()}"
+        return f"{self._generating_rule}: {self._origin.get_node_state()} -> {self._destiny.get_node_state()}"
 
         
 class Node:
@@ -90,5 +90,16 @@ class Node:
     def set_jug_arr(self, jug_arr):
         self._jug_arr = jug_arr
 
-    def print_node(self):
+    def get_node_state(self):
         return [str(j.get_current_volume()) for j in self._jug_arr]
+
+    def transfer_to_left(self, jug):
+        jug_pos = self._jug_arr.index(jug)
+        self._jug_arr[jug_pos-1].transfer_from(jug)
+
+    def transfer_to_right(self, jug):
+        jug_pos = self._jug_arr.index(jug)
+        if jug_pos == (len(self._jug_arr)-1):
+            self._jug_arr[0].transfer_from(jug)
+        else:
+            self._jug_arr[jug_pos+1].transfer_from(jug)

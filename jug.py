@@ -29,10 +29,11 @@ class Jug:
         self._current_volume = self._total_capacity
     
     def transfer_from(self, node):
-        if ((self._current_volume + node.get_current_volume()) < self._total_capacity):
+        if ((self._current_volume + node.get_current_volume()) >= self._total_capacity):
             self._current_volume = self._total_capacity
         else:
             self._current_volume += node.get_current_volume()
+        node.spill()
 
     def transfer_to(self, node):
         if not self._current_volume == 0:

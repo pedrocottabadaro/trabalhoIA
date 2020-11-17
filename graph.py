@@ -104,15 +104,21 @@ class Node:
         else:
             self._jug_arr[jug_pos+1].transfer_from(jug)
 
-    def control_strategy(self, operator, index):
+    def control_strategy(self, operator, jug):
+        index = self._jug_arr.index(jug)
+        
         if operator == 1:
             self._jug_arr[index].fill()
+            return True
         elif operator == 2:
             self._jug_arr[index].spill()
+            return True
         elif operator == 3:
             self.transfer_to_left(self._jug_arr[index]) 
+            return True
         elif operator == 4:
             self.transfer_to_right(self._jug_arr[index])
+            return True
 
     def is_solution(self, target_amount):
         if self._jug_arr is None:

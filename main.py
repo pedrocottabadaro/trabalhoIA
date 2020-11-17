@@ -27,16 +27,12 @@ def main():
         r4= TRANSFERIR DIREITA
     """
     jug_array = [Jug(4),Jug(3), Jug(5)]
+
     node = Node(None, jug_array)
-    print(node.get_node_state())
-    
-    node.get_jug_arr()[0].fill()
-    print(node.get_node_state())
 
-    node.transfer_to_right(node.get_jug_arr()[0])
-    print(node.get_node_state())
+    node.control_strategy(4, jug_array[0])
 
-    print(node.is_solution(0))
+    print(node.get_node_state())
 
 if __name__ == "__main__":
     main()

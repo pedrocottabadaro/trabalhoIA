@@ -104,9 +104,7 @@ class Node:
         else:
             self._jug_arr[jug_pos+1].transfer_from(jug)
 
-    def control_strategy(self, operator, jug):
-        index = self._jug_arr.index(jug)
-        
+    def control_strategy(self, operator, index):       
         if operator == 1:
             self._jug_arr[index].fill()
             return True

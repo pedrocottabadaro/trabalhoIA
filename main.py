@@ -30,7 +30,7 @@ def main():
 
     node = Node(None, jug_array)
 
-    node.control_strategy(4, jug_array[0])
+    node.control_strategy(1, 0)
 
     print(node.get_node_state())
 

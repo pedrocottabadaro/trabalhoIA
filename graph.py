@@ -121,6 +121,10 @@ class Node:
             return self.transfer_to_right(index)
 
     def is_solution(self, target_amount):
+        """
+        Checks if given Node has the target amount in one of its jugs
+        Returns true for success, false otherwise
+        """
         if self._jug_arr is None:
             return False
 

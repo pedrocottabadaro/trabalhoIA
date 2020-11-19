@@ -30,9 +30,14 @@ def main():
 
     node = Node(None, jug_array)
 
-    node.control_strategy(1, 0)
+    node.get_jug_arr()[0].fill()
+    new_node = copy.deepcopy(node)
 
     print(node.get_node_state())
+    print("Rule: "+ str(new_node.try_apply_rule()))
+
+    print(new_node.get_node_state())
+
 
 if __name__ == "__main__":
     main()

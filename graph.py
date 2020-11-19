@@ -10,9 +10,11 @@ class Graph:
 
     """
 
-    def __init__(self):
+    def __init__(self, root):
+        self._root = root
         self._edges = []
         self._vertices = []
+        self.insert_node(self._root, "root")
 
     def get_edges(self):
         return self._edges
@@ -20,10 +22,11 @@ class Graph:
     def get_vertices(self):
         return self._vertices
 
-    def insert_node(self, node, generating_rule):   
-        if not node in self._vertices:     
-            self._vertices.append(node) 
-            self._edges.append(Edge(node.get_parent_node(), node, generating_rule))
+    def insert_node(self, node, generating_rule):
+        if not node in self._vertices:
+            self._vertices.append(node)
+            self._edges.append(
+                Edge(node.get_parent_node(), node, generating_rule))
 
     def print_graph(self):
         for edge in self._edges:
@@ -40,15 +43,15 @@ class Edge:
     Returns:
         A reference to an edge object containing a node origin and a node destiny
     """
-    
+
     def __init__(self, origin, destiny, generating_rule):
         self._origin = origin
         self._destiny = destiny
         self._generating_rule = generating_rule
-    
+
     def get_origin(self):
         return self._origin
-    
+
     def get_destiny(self):
         return self._destiny
 
@@ -60,7 +63,7 @@ class Edge:
             return f"{self._generating_rule}: |-> {self._destiny.get_node_state()}"
         return f"{self._generating_rule}: {self._origin.get_node_state()} -> {self._destiny.get_node_state()}"
 
-        
+
 class Node:
     """
     Defines a node which contains a jug array.
@@ -73,11 +76,11 @@ class Node:
         A node instance containing a jug array and 
         a parent node reference.
     """
-    
+
     def __init__(self, parent_node, jug_arr):
         self._parent_node = parent_node
         self._jug_arr = jug_arr
-        
+
     def get_parent_node(self):
         return self._parent_node
 
@@ -86,37 +89,36 @@ class Node:
 
     def get_jug_arr(self):
         return self._jug_arr
-    
+
     def set_jug_arr(self, jug_arr):
         self._jug_arr = jug_arr
 
     def get_node_state(self):
         return [str(j.get_current_volume()) for j in self._jug_arr]
 
-    def transfer_to_left(self, jug):
-        jug_pos = self._jug_arr.index(jug)
-        self._jug_arr[jug_pos-1].transfer_from(jug)
+    def transfer_to_left(self, jug_pos):
+        left_jug = self._jug_arr[jug_pos-1]
+        return self._jug_arr[jug_pos].transfer_to(left_jug)
 
-    def transfer_to_right(self, jug):
-        jug_pos = self._jug_arr.index(jug)
+    def transfer_to_right(self, jug_pos):
         if jug_pos == (len(self._jug_arr)-1):
-            self._jug_arr[0].transfer_from(jug)
+            return self._jug_arr[jug_pos].transfer_to(self._jug_arr[0])
         else:
-            self._jug_arr[jug_pos+1].transfer_from(jug)
+            return self._jug_arr[jug_pos].transfer_to(self._jug_arr[jug_pos+1])
 
-    def control_strategy(self, operator, index):       
+    def control_strategy(self, operator, index):
+        """
+        Try to apply the given operation.
+        Returns True for success and False for failure
+        """
         if operator == 1:
-            self._jug_arr[index].fill()
-            return True
+            return self._jug_arr[index].fill()
         elif operator == 2:
-            self._jug_arr[index].spill()
-            return True
+            return self._jug_arr[index].spill()
         elif operator == 3:
-            self.transfer_to_left(self._jug_arr[index]) 
-            return True
+            return self.transfer_to_left(index)
         elif operator == 4:
-            self.transfer_to_right(self._jug_arr[index])
-            return True
+            return self.transfer_to_right(index)
 
     def is_solution(self, target_amount):
         if self._jug_arr is None:
@@ -126,3 +128,26 @@ class Node:
             if x.get_current_volume() == target_amount:
                 return True
         return False
+
+    def try_apply_rule(self):
+        """
+        Retrieves which rule was applied to this Node
+        The rule applied is binded to the control strategy
+        If no rules were applied, returns 0
+        """
+
+        i = 0
+        operator = 1
+        jug_arr_len = len(self._jug_arr) - 1
+
+        while(i <= jug_arr_len):
+            if self.control_strategy(operator, i):
+                return operator
+
+            if operator == 4:
+                operator = 1
+                i = i + 1
+            
+            operator = operator + 1
+       
+        return 0

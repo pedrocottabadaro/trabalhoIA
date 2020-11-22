@@ -100,14 +100,31 @@ class Node:
         return [str(j.get_current_volume()) for j in self._jug_arr]
 
     def transfer_to_left(self, jug_pos):
-        left_jug = self._jug_arr[jug_pos-1]
-        return self._jug_arr[jug_pos].transfer_to(left_jug)
+        return self.transfer_to(jug_pos, jug_pos-1)
 
     def transfer_to_right(self, jug_pos):
         if jug_pos == (len(self._jug_arr)-1):
-            return self._jug_arr[jug_pos].transfer_to(self._jug_arr[0])
+            return self.transfer_to(jug_pos, 0)
         else:
-            return self._jug_arr[jug_pos].transfer_to(self._jug_arr[jug_pos+1])
+            return self.transfer_to(jug_pos, jug_pos+1)
+    
+    def transfer_to(self,source_jug_index, target_jug_index):
+        source_jug = self._jug_arr[source_jug_index]
+        target_jug = self._jug_arr[target_jug_index]
+
+        if not source_jug.get_current_volume() == 0 and target_jug.get_current_volume() != target_jug.get_total_capacity():
+            transfer_volume = target_jug.get_total_capacity() - target_jug.get_current_volume()
+
+            if transfer_volume >= source_jug.get_current_volume():
+                transfer_volume = source_jug.get_current_volume()
+
+            source_jug.set_current_volume(source_jug.get_current_volume() - transfer_volume)
+            target_jug.set_current_volume(target_jug.get_current_volume() + transfer_volume)
+
+            self._jug_arr[source_jug_index] = source_jug
+            self._jug_arr[target_jug_index] = target_jug
+            return True
+        return False
 
     def control_strategy(self, operator, index):
         """
@@ -148,7 +165,7 @@ class Node:
         jug_arr_len = len(self._jug_arr) - 1
 
         while(i <= jug_arr_len):
-            if operator > self._jug_arr[i].get_operator() and self.control_strategy(operator, i) and g.try_insert_node(self, "r"+ str(operator)):
+            if operator > self._jug_arr[i].get_operator() and self.control_strategy(operator, i) and g.try_insert_node(self, "r" + str(i) + str(operator)):
                 self._jug_arr[i].set_operator(operator)
                 return operator                 
 

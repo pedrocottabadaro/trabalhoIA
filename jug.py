@@ -45,16 +45,3 @@ class Jug:
             self._current_volume = self._total_capacity
             return True
         return False
-
-    def transfer_to(self, target_jug):
-        if not self._current_volume == 0:
-            transfer_volume = target_jug.get_total_capacity() - target_jug.get_current_volume()
-
-            if transfer_volume >= self._current_volume:
-                transfer_volume = self._current_volume
-
-            self._current_volume = self._current_volume - transfer_volume
-            target_jug.set_current_volume(target_jug.get_current_volume() + transfer_volume)
-
-            return True
-        return False

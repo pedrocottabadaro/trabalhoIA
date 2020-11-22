@@ -14,7 +14,7 @@ class Graph:
         self._root = root
         self._edges = []
         self._vertices = []
-        self.insert_node(self._root, "root")
+        self.try_insert_node(self._root, "root")
 
     def get_edges(self):
         return self._edges
@@ -22,11 +22,13 @@ class Graph:
     def get_vertices(self):
         return self._vertices
 
-    def insert_node(self, node, generating_rule):
+    def try_insert_node(self, node, generating_rule):
         if not node in self._vertices:
             self._vertices.append(node)
             self._edges.append(
                 Edge(node.get_parent_node(), node, generating_rule))
+            return True
+        return False
 
     def print_graph(self):
         for edge in self._edges:
@@ -80,6 +82,7 @@ class Node:
     def __init__(self, parent_node, jug_arr):
         self._parent_node = parent_node
         self._jug_arr = jug_arr
+        self._operator = 0
 
     def get_parent_node(self):
         return self._parent_node
@@ -114,11 +117,11 @@ class Node:
         if operator == 1:
             return self._jug_arr[index].fill()
         elif operator == 2:
-            return self._jug_arr[index].spill()
-        elif operator == 3:
             return self.transfer_to_left(index)
-        elif operator == 4:
+        elif operator == 3:
             return self.transfer_to_right(index)
+        elif operator == 4:
+            return self._jug_arr[index].spill()
 
     def is_solution(self, target_amount):
         """
@@ -133,7 +136,7 @@ class Node:
                 return True
         return False
 
-    def try_apply_rule(self):
+    def try_apply_rule(self, g):
         """
         Retrieves which rule was applied to this Node
         The rule applied is binded to the control strategy
@@ -145,11 +148,12 @@ class Node:
         jug_arr_len = len(self._jug_arr) - 1
 
         while(i <= jug_arr_len):
-            if self.control_strategy(operator, i):
-                return operator
+            if operator > self._jug_arr[i].get_operator() and self.control_strategy(operator, i) and g.try_insert_node(self, "r"+ str(operator)):
+                self._jug_arr[i].set_operator(operator)
+                return operator                 
 
             if operator == 4:
-                operator = 1
+                operator = 0
                 i = i + 1
             
             operator = operator + 1

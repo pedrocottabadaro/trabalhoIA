@@ -17,6 +17,7 @@ class Jug:
     def __init__(self, total_capacity):
         self._total_capacity = total_capacity
         self._current_volume = 0
+        self._operator = 0
 
     def get_total_capacity(self):
         return self._total_capacity
@@ -26,6 +27,12 @@ class Jug:
 
     def set_current_volume(self, value):
         self._current_volume = value
+
+    def get_operator(self):
+        return self._operator
+
+    def set_operator(self, value):
+        self._operator = value
 
     def spill(self):
         if self._current_volume != 0:
@@ -41,11 +48,13 @@ class Jug:
 
     def transfer_to(self, target_jug):
         if not self._current_volume == 0:
-            if (target_jug.get_current_volume() + self._current_volume) >= target_jug.get_total_capacity():
-                target_jug.set_current_volume(self._total_capacity)
-            else:
-                target_jug.set_current_volume(self._current_volume)
-            
-            self.spill()
+            transfer_volume = target_jug.get_total_capacity() - target_jug.get_current_volume()
+
+            if transfer_volume >= self._current_volume:
+                transfer_volume = self._current_volume
+
+            self._current_volume = self._current_volume - transfer_volume
+            target_jug.set_current_volume(target_jug.get_current_volume() + transfer_volume)
+
             return True
         return False

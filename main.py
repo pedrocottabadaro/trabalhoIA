@@ -9,60 +9,39 @@ Discentes: Davi Rezende
            
 Doscente: Saulo Moraes
 """
-#from backtracking import Backtracking
 from graph import Node, Graph, Edge
 from jug import Jug
 import copy
 
 
-def backtracking(root):
+def backtracking(s, target):  
+    g = Graph(s)
+    n = copy.deepcopy(s)
    
+    failure=False
+    success=False
   
-    fracasso=False
-    sucesso=False
-    S=root
-    N = copy.deepcopy(S)
-    
-    000
-    while not (sucesso or fracasso):
-        newNode=copy.deepcopy(N)
-        
-        if newNode.try_apply_rule()!=0:
-            
-            if newNode.is_solution():
-                sucesso=True
+    while not (success or failure):       
+        new_node = copy.deepcopy(n)
+        new_node.set_parent_node(n)
+
+        generation_rule = new_node.try_apply_rule(g)
+
+        if generation_rule != 0:
+            n = new_node
+
+            if n.is_solution(target):
+                success=True
+            else:
+                g.print_graph()
+                print()
                 
         else:
-            if newNode==S:
-                fracasso=True
+            if n == s:
+                failure=True
             else:
-                N=newNode.get_parent_node()
-        
+                n = n.get_parent_node()   
             
-                
-            
-    # início
-    # S := estado inicial; N := S;
-    # fracasso := F; sucesso := F;
-    # enquanto não (sucesso ou fracasso) faça
-    # se R(N) ≠ vazio então
-    # selecione o operador r de R(N);
-    # N := r(N);
-    # se N é solução então
-    # sucesso := T;
-    # fim-se;
-    # senão
-    # se N = S então
-    # fracasso := T;
-    # senão
-    # N := pai(N);
-    # fim-se;
-    # fim-se;
-    # fim-enquanto;
-    # fim.
-
-
-
 def main():
     """
     Main function of application
@@ -75,36 +54,7 @@ def main():
         r3=TRANSFERIR ESQUERDA
         r4= TRANSFERIR DIREITA
     """
-    
-    
-    
-    jug_array = [Jug(4),Jug(3), Jug(5)]
 
-    node = Node(None, jug_array)
-    
-    g=Graph(node)
-    i=0
-    
-    while(i<=4):
-        newNode=copy.deepcopy(node)
-        
-        x=newNode.try_apply_rule()
-        
-        if(x!=0):
-            g.insert_node(newNode,"r"+str(x))
-        
-        i=i+1
-        
-        node=newNode
-    
-    print(node.operadores)
-    
-    
-    g.print_graph()
-    
-
-    
-
-
+    backtracking(Node(None, [Jug(4), Jug(3)]), 2)
 if __name__ == "__main__":
     main()

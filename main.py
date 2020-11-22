@@ -9,10 +9,59 @@ Discentes: Davi Rezende
            
 Doscente: Saulo Moraes
 """
-from backtracking import Backtracking
+#from backtracking import Backtracking
 from graph import Node, Graph, Edge
 from jug import Jug
 import copy
+
+
+def backtracking(root):
+   
+  
+    fracasso=False
+    sucesso=False
+    S=root
+    N = copy.deepcopy(S)
+    
+    000
+    while not (sucesso or fracasso):
+        newNode=copy.deepcopy(N)
+        
+        if newNode.try_apply_rule()!=0:
+            
+            if newNode.is_solution():
+                sucesso=True
+                
+        else:
+            if newNode==S:
+                fracasso=True
+            else:
+                N=newNode.get_parent_node()
+        
+            
+                
+            
+    # início
+    # S := estado inicial; N := S;
+    # fracasso := F; sucesso := F;
+    # enquanto não (sucesso ou fracasso) faça
+    # se R(N) ≠ vazio então
+    # selecione o operador r de R(N);
+    # N := r(N);
+    # se N é solução então
+    # sucesso := T;
+    # fim-se;
+    # senão
+    # se N = S então
+    # fracasso := T;
+    # senão
+    # N := pai(N);
+    # fim-se;
+    # fim-se;
+    # fim-enquanto;
+    # fim.
+
+
 
 def main():
     """
@@ -26,17 +75,35 @@ def main():
         r3=TRANSFERIR ESQUERDA
         r4= TRANSFERIR DIREITA
     """
+    
+    
+    
     jug_array = [Jug(4),Jug(3), Jug(5)]
 
     node = Node(None, jug_array)
+    
+    g=Graph(node)
+    i=0
+    
+    while(i<=4):
+        newNode=copy.deepcopy(node)
+        
+        x=newNode.try_apply_rule()
+        
+        if(x!=0):
+            g.insert_node(newNode,"r"+str(x))
+        
+        i=i+1
+        
+        node=newNode
+    
+    print(node.operadores)
+    
+    
+    g.print_graph()
+    
 
-    node.get_jug_arr()[0].fill()
-    new_node = copy.deepcopy(node)
-
-    print(node.get_node_state())
-    print("Rule: "+ str(new_node.try_apply_rule()))
-
-    print(new_node.get_node_state())
+    
 
 
 if __name__ == "__main__":

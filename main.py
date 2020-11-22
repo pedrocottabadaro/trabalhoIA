@@ -37,10 +37,11 @@ def backtracking(s, target):
                 print()
                 
         else:
-            if n == s:
+            if n.get_node_state() == s.get_node_state():
                 failure=True
             else:
-                n = n.get_parent_node()   
+                n = n.get_parent_node()
+                print("bt")   
             
 def main():
     """

@@ -23,12 +23,15 @@ class Graph:
         return self._vertices
 
     def try_insert_node(self, node, generating_rule):
-        if not node in self._vertices:
-            self._vertices.append(node)
-            self._edges.append(
-                Edge(node.get_parent_node(), node, generating_rule))
-            return True
-        return False
+
+        for v in self._vertices:
+            if v.get_node_state() == node.get_node_state():
+                return False
+
+        self._vertices.append(node)
+        self._edges.append(
+            Edge(node.get_parent_node(), node, generating_rule))
+        return True
 
     def print_graph(self):
         for edge in self._edges:
@@ -82,7 +85,6 @@ class Node:
     def __init__(self, parent_node, jug_arr):
         self._parent_node = parent_node
         self._jug_arr = jug_arr
-        self._operator = 0
 
     def get_parent_node(self):
         return self._parent_node
@@ -107,8 +109,8 @@ class Node:
             return self.transfer_to(jug_pos, 0)
         else:
             return self.transfer_to(jug_pos, jug_pos+1)
-    
-    def transfer_to(self,source_jug_index, target_jug_index):
+
+    def transfer_to(self, source_jug_index, target_jug_index):
         source_jug = self._jug_arr[source_jug_index]
         target_jug = self._jug_arr[target_jug_index]
 
@@ -118,8 +120,10 @@ class Node:
             if transfer_volume >= source_jug.get_current_volume():
                 transfer_volume = source_jug.get_current_volume()
 
-            source_jug.set_current_volume(source_jug.get_current_volume() - transfer_volume)
-            target_jug.set_current_volume(target_jug.get_current_volume() + transfer_volume)
+            source_jug.set_current_volume(
+                source_jug.get_current_volume() - transfer_volume)
+            target_jug.set_current_volume(
+                target_jug.get_current_volume() + transfer_volume)
 
             self._jug_arr[source_jug_index] = source_jug
             self._jug_arr[target_jug_index] = target_jug
@@ -165,14 +169,14 @@ class Node:
         jug_arr_len = len(self._jug_arr) - 1
 
         while(i <= jug_arr_len):
-            if operator > self._jug_arr[i].get_operator() and self.control_strategy(operator, i) and g.try_insert_node(self, "r" + str(i) + str(operator)):
-                self._jug_arr[i].set_operator(operator)
-                return operator                 
+            if operator not in self._jug_arr[i].get_operators() and self.control_strategy(operator, i) and g.try_insert_node(self, "r" + str(i) + str(operator)):
+                self._jug_arr[i].add_operator(operator)
+                return operator
 
             if operator == 4:
                 operator = 0
                 i = i + 1
-            
+
             operator = operator + 1
-       
+
         return 0

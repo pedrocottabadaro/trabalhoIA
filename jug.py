@@ -17,7 +17,7 @@ class Jug:
     def __init__(self, total_capacity):
         self._total_capacity = total_capacity
         self._current_volume = 0
-        self._operator = 0
+        self._operators = []
 
     def get_total_capacity(self):
         return self._total_capacity
@@ -28,11 +28,11 @@ class Jug:
     def set_current_volume(self, value):
         self._current_volume = value
 
-    def get_operator(self):
-        return self._operator
+    def get_operators(self):
+        return self._operators
 
-    def set_operator(self, value):
-        self._operator = value
+    def add_operator(self, value):
+        self._operators.append(value)
 
     def spill(self):
         if self._current_volume != 0:

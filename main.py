@@ -9,6 +9,7 @@ Discentes: Davi Rezende
            
 Doscente: Saulo Moraes
 """
+from backtracking import Backtracking
 from graph import Node, Graph, Edge
 from jug import Jug
 import copy
@@ -25,32 +26,18 @@ def main():
         r3=TRANSFERIR ESQUERDA
         r4= TRANSFERIR DIREITA
     """
-    jug_array = [Jug(4),Jug(3)]
+    jug_array = [Jug(4),Jug(3), Jug(5)]
 
-    jug_array_2 = [Jug(4),Jug(3)]
-    jug_array_2[0].fill()
+    node = Node(None, jug_array)
 
-    jug_array_3 = copy.deepcopy(jug_array_2)
-    jug_array_3[0].transfer_to(jug_array_3[1])
+    node.get_jug_arr()[0].fill()
+    new_node = copy.deepcopy(node)
 
-    jug_array_4 = copy.deepcopy(jug_array_3)
-    jug_array_4[1].spill()
+    print(node.get_node_state())
+    print("Rule: "+ str(new_node.try_apply_rule()))
 
+    print(new_node.get_node_state())
 
-    
-
-    n = Node(None, jug_array)
-    n2 = Node(n, jug_array_2)
-    n3 = Node(n2, jug_array_3)
-    n4 = Node(n3, jug_array_4)
-
-    g = Graph()
-    g.insert_node(n,"begin")
-    g.insert_node(n2, "r1")
-    g.insert_node(n3, "r4")
-    g.insert_node(n4, "r2")
-
-    g.print_graph()
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,5 @@
+
+import copy
 class Graph:
     """
     Represents a collection of a network of edges of connected nodes
@@ -32,7 +34,20 @@ class Graph:
         self._edges.append(
             Edge(node.get_parent_node(), node, generating_rule))
         return True
-
+    
+    
+    def check_insert_node(self,node):
+        
+        for v in self._vertices:
+            if v.get_node_state() == node.get_node_state():
+                return False
+            
+        return True
+        
+    
+    
+    
+    
     def print_graph(self):
         for edge in self._edges:
             print(edge.print_edge())
@@ -169,8 +184,16 @@ class Node:
         jug_arr_len = len(self._jug_arr) - 1
 
         while(i <= jug_arr_len):
-            if operator not in self._jug_arr[i].get_operators() and self.control_strategy(operator, i) and g.try_insert_node(self, "r" + str(i) + str(operator)):
-                self._jug_arr[i].add_operator(operator)
+            
+            nodeAux=copy.deepcopy(self)
+            nodeAux.control_strategy(operator, i) 
+            
+
+            
+            if g.check_insert_node(nodeAux):
+                
+                self.control_strategy(operator, i) 
+                g.try_insert_node(self,"R"+str(i)+str(operator))
                 return operator
 
             if operator == 4:

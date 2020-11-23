@@ -36,6 +36,21 @@ class Graph:
         return True
     
     
+    ##Insert node para largura e profundidade
+    def insert_node_LP(self, node, generating_rule,fechados):
+
+        for v in fechados:
+            if v.get_node_state() == node.get_node_state():
+                return False
+        
+        
+        self._vertices.append(node)
+        self._edges.append(
+            Edge(node.get_parent_node(), node, generating_rule))
+        
+        return True
+    
+    
     def check_insert_node(self,node):
         
         for v in self._vertices:
@@ -44,9 +59,6 @@ class Graph:
             
         return True
         
-    
-    
-    
     
     def print_graph(self):
         for edge in self._edges:

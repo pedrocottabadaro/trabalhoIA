@@ -1,17 +1,19 @@
 from graph import Node, Graph, Edge
 from jug import Jug
 import copy
-import queue
-import random 
 
 def profundidade(s,target):
     print("-----PROFUNDIDADE------")
     g = Graph(s)
     n = copy.deepcopy(s)
 
-    failure=False, success=False
-    abertos = [], fechados=[]
-    contadorAbertos=0, contadorFechados=0, profundidade=0
+    failure=False 
+    success=False
+    abertos = []
+    fechados=[]
+    contadorAbertos=0
+    contadorFechados=0
+    profundidade=0
     abertos.append(n)
     
     while not (success or failure):
@@ -25,7 +27,7 @@ def profundidade(s,target):
         else:
             n=abertos.pop()
 
-            #verifica se eh solucao
+            #verifica se é solucao
             if(n.is_solution(target)):
                 g.print_graph()
                 print("SOLUCAO")
@@ -34,7 +36,8 @@ def profundidade(s,target):
                 continue
             
             else:           
-                i=0, operator = 1
+                i=0
+                operator = 1
                 jug_arr_len = len(n._jug_arr) - 1
 
                 #enquanto ainda tiver jarros para alterar

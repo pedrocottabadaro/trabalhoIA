@@ -7,8 +7,10 @@ def largura(s,target):
     print("-----LARGURA------")
     g = Graph(s)
     n = copy.deepcopy(s)
-    contadorAbertos=0, contadorFechados=0
-    failure=False, success=False
+    contadorAbertos=0
+    contadorFechados=0
+    failure=False
+    success=False
     abertos = queue.Queue() #fila de abertos
     fechados=[]#lista de fechados
     
@@ -34,7 +36,8 @@ def largura(s,target):
                 continue
             
             else: #se nao for solucao, vamos expandir esse no 
-                i=0, operator=1
+                i=0
+                operator=1
                 jug_arr_len = len(n._jug_arr) - 1
              
                 #enquanto ainda tiver jarros para modificar

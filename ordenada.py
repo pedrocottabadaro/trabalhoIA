@@ -7,9 +7,13 @@ def ordenada(s,target):
     g = Graph(s)
     n = copy.deepcopy(s)
 
-    failure=False, success=False, inicio=True
-    abertos = [], fechados = []
-    contadorAbertos = 0, contadorFechados = 0
+    failure=False 
+    success=False
+    inicio=True
+    abertos = []
+    fechados = []
+    contadorAbertos = 0
+    contadorFechados = 0
     
     abertos.append(n)
     while not (success or failure):

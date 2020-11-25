@@ -7,7 +7,8 @@ def backtracking(s, target):
     g = Graph(s)
     n = copy.deepcopy(s)
     contadorPercorridos=0
-    failure=False, success=False
+    failure=False
+    success=False
   
     while not (success or failure):  
         new_node = copy.deepcopy(n)
@@ -19,7 +20,7 @@ def backtracking(s, target):
             contadorPercorridos=contadorPercorridos+1
             n = new_node
             
-            #verifica se eh solucao
+            #verifica se é solucao
             if n.is_solution(target):
                 g.print_graph()
                 print("SOLUCAO")

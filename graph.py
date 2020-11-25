@@ -158,7 +158,7 @@ class Node:
         elif operator == 4:
             return self._jug_arr[index].spill()
 
-    #verifica se um node eh solucao
+    #verifica se um node é solucao
     def is_solution(self, target_amount):
         if self._jug_arr is None:
             return False
@@ -170,7 +170,8 @@ class Node:
 
     #tenta aplicar um operador, se conseguir, aplica, tenta inserir no grafo, e retorna a regra aplicada
     def try_apply_rule(self, g):
-        i = 0, operator = 1
+        i = 0
+        operator = 1
         jug_arr_len = len(self._jug_arr) - 1
 
         while(i <= jug_arr_len):

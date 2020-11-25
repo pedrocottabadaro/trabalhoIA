@@ -50,7 +50,6 @@ def main():
 
    
     
-    
     start = time.time()
     backtracking(root, target_amount)
     end = time.time()

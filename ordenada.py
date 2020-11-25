@@ -67,7 +67,7 @@ def ordenada(s,target):
                             insert=False       
                         
                     if(insert):
-                        u.set_weight()
+                        u.set_weight(target)
                         u.set_depth(n)
                         g.insert_node_LP(u,"R"+str(i)+str(operator))
                         abertos.append(u)
@@ -87,6 +87,7 @@ def ordenada(s,target):
     print("NOS ABERTOS = "+str(contadorAbertos))
     print("NOS FECHADOS = "+str(contadorFechados))
     maior=0
+    custo=None
     for x in g._vertices:
         if(x.get_depth()):
             maior=x.get_depth()
@@ -95,4 +96,5 @@ def ordenada(s,target):
             custo=x.get_weight()
     
     print("PROFUNDIDADE = "+str(maior))
-    print("CUSTO = "+str(custo))
+    if(custo!=None):
+        print("CUSTO = "+str(custo))

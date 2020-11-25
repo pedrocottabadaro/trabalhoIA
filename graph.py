@@ -91,12 +91,14 @@ class Node:
         return self._weight
     
     #o peso utilizado foi o volume total do node
-    def set_weight(self):
+    def set_weight(self,target):
         for x in self._jug_arr:
             self._weight+=x.get_current_volume()
         
         if(self._parent_node!=None):
             self._weight=self._weight+self._parent_node.get_weight()
+            self._weight=abs(self._weight-target)
+            
         else:
             self._weight=0
         

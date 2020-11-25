@@ -352,6 +352,10 @@ def main():
     """
     
     jug_list = []
+    """
+    Primeira linha do arquivo = objetivo do problema
+    Demais linhas = capacidade total do jarro
+    """
     f = open("entrada.txt", "r")
     target_amount = int(f.readline())
 

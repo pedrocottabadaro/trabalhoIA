@@ -1,5 +1,6 @@
 
 import copy
+import random
 class Graph:
     """
     Represents a collection of a network of edges of connected nodes
@@ -37,18 +38,14 @@ class Graph:
     
     
     ##Insert node para largura e profundidade
-    def insert_node_LP(self, node, generating_rule,fechados):
+    def insert_node_LP(self, node, generating_rule):
 
-        for v in fechados:
-            if v.get_node_state() == node.get_node_state():
-                return False
-        
-        
+      
         self._vertices.append(node)
         self._edges.append(
             Edge(node.get_parent_node(), node, generating_rule))
         
-        return True
+
     
     
     def check_insert_node(self,node):
@@ -81,6 +78,7 @@ class Edge:
         self._destiny = destiny
         self._generating_rule = generating_rule
 
+
     def get_origin(self):
         return self._origin
 
@@ -112,7 +110,39 @@ class Node:
     def __init__(self, parent_node, jug_arr):
         self._parent_node = parent_node
         self._jug_arr = jug_arr
+        self._heuristic=0
+        self._weight=0
+        
 
+    def get_heuristic(self):
+        
+        self._heuristic=0
+        for x in self._jug_arr:
+            self._heuristic+=x.get_current_volume()
+            
+        return self._heuristic
+    
+    def get_weight(self):
+
+        return self._weight
+    
+    def set_weight(self,parentNode,solution):
+        self._weight=0
+        weightParent=0
+        for x in self._jug_arr:
+            self._weight+=x.get_current_volume()-solution
+            
+        for y in parentNode._jug_arr:
+            weightParent+=y.get_current_volume()-solution
+            
+            
+        if(self._weight!=0):
+            self._weight+weightParent
+        else:
+            self.weight=0
+        
+       
+    
     def get_parent_node(self):
         return self._parent_node
 

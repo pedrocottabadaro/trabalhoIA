@@ -367,7 +367,6 @@ def main():
     backtracking(root, target_amount)
     largura(root, target_amount)
     profundidade(root, target_amount)
-    largura(root, target_amount)
     gulosa(root, target_amount)
     ordenada(root, target_amount)
 

@@ -1,6 +1,3 @@
-import copy as Copy
-
-
 class Jug:
     """
     Liquid recipient.

@@ -1,28 +1,20 @@
 from graph import Node, Graph, Edge
 from jug import Jug
 import copy
-import queue
-import time
-import random 
 
 def ordenada(s,target):
     print("-----ORDENADA------")
-
     g = Graph(s)
     n = copy.deepcopy(s)
 
-    failure=False
-    success=False
-    abertos = []
-    contadorAbertos=0
-    contadorFechados=0
-    fechados=[]
+    failure=False, success=False, inicio=True
+    abertos = [], fechados = []
+    contadorAbertos = 0, contadorFechados = 0
     
     abertos.append(n)
-    inicio=True
     while not (success or failure):
-
-        pai=copy.deepcopy(s)
+        
+        #se nao tiver mais nenhum no aberto, e nao tiver achado a solucao, entao falhou
         if len(abertos)==0:
             print(g.print_graph())
             print("FRACASSO")
@@ -31,6 +23,7 @@ def ordenada(s,target):
             lower=999999999
             i=0
             
+            #seleciona o menor custo da lista de abertos
             while i<len(abertos):
                 parentWeight=0
                 x=abertos[i]
@@ -40,11 +33,13 @@ def ordenada(s,target):
                 if(weight<lower):
                     lower=weight
                     n=abertos[i]
-                    
                 i=i+1
+
             abertos.remove(n)
             fechados.append(n)
             contadorFechados=contadorFechados+1
+            
+            #verifica se eh solucao
             if(n.is_solution(target)):
                 g.print_graph()
                 print("SOLUCAO")
@@ -62,6 +57,7 @@ def ordenada(s,target):
                     u.control_strategy(operator,i)
                     u.set_parent_node(n)
 
+                    #verifica se o node esta na lista de fechados, para nao gerar um repetido
                     for v in fechados:
                         if v.get_node_state() == u.get_node_state():
                             insert=False       
@@ -74,6 +70,7 @@ def ordenada(s,target):
                         contadorAbertos=contadorAbertos+1
                         g.print_graph()
                     
+                    #verifica se ja esta no ultimo operador
                     if operator == 4:
                         operator = 0
                         i = i + 1
@@ -95,7 +92,3 @@ def ordenada(s,target):
     
     print("PROFUNDIDADE = "+str(maior))
     print("CUSTO = "+str(custo))
-
-    
-
-

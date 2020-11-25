@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 TRABALHO INTELIGENCIA ARTIFICIAL - PROBLEMA DO JOGO DOS JARROS
-Inteligência Artificial - DCC014
+Inteligência Artificial - DCC014 - 2020.1 - ERE
 
 Discentes: Davi Rezende
            Pedro Cotta Badaro
-           Jonas Gabriel
-           
+           Jonas Gabriel           
 Doscente: Saulo Moraes
 """
 from graph import Node, Graph, Edge
@@ -16,18 +15,12 @@ from ordenada import ordenada
 from guloso import guloso
 from backtracking import backtracking
 from jug import Jug
-import copy
-import queue
 import time
-import random
 
-            
 def main():
     """
     Main function of application
-    """
-
-    """
+    
         OPERACOES
         r1=ENCHER JARRO
         r2=ESVAZIAR JARRO
@@ -37,8 +30,8 @@ def main():
     
     jug_list = []
     """
-    Primeira linha do arquivo = objetivo do problema
-    Demais linhas = capacidade total do jarro
+    Primeira linha do arquivo = quantidade objetivo do problema, em qualquer jarro
+    Demais linhas = capacidade total dos jarros
     """
     f = open("entrada.txt", "r")
     target_amount = int(f.readline())
@@ -48,8 +41,9 @@ def main():
 
     root = Node(None, jug_list)
 
-   
-    
+    """
+    a partir daqui todos os algoritmos serao executados e os tempos de execucao serao armazenados
+    """
     start = time.time()
     backtracking(root, target_amount)
     end = time.time()
@@ -86,9 +80,6 @@ def main():
     print("-----------------LARGURA:"+str(timeLarg)+"------------------------------")
     print("-----------------GULOSO:"+str(timeGul)+"------------------------------")
     print("-----------------ORDENADA:"+str(timeOrd)+"------------------------------")
-
     
-
-
 if __name__ == "__main__":
     main()

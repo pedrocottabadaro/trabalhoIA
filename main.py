@@ -351,19 +351,21 @@ def main():
         r4= TRANSFERIR DIREITA
     """
     
-    
+    jug_list = []
+    f = open("entrada.txt", "r")
+    target_amount = int(f.readline())
 
-    #backtracking(Node(None, [Jug(1), Jug(1)]), 2)
-    #largura(Node(None, [Jug(4), Jug(5)]), 2)
-    #profundidade(Node(None, [Jug(4), Jug(5)]), 2)
+    for x in f:
+        jug_list.append(Jug(int(x.strip())))
 
-    ##largura(Node(None, [Jug(4), Jug(7),Jug(9), Jug(5),Jug(20), Jug(5)]), 2)
-    ##gulosa(Node(None, [Jug(4), Jug(5)]), 2)
-    
-    
-    ordenada(Node(None, [Jug(4), Jug(5)]), 2)
+    root = Node(None, jug_list)
 
-
+    backtracking(root, target_amount)
+    largura(root, target_amount)
+    profundidade(root, target_amount)
+    largura(root, target_amount)
+    gulosa(root, target_amount)
+    ordenada(root, target_amount)
 
 
 if __name__ == "__main__":

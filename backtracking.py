@@ -11,6 +11,7 @@ def backtracking(s, target):
     print("-----BACKTRACKING------")
     g = Graph(s)
     n = copy.deepcopy(s)
+    contadorPercorridos=0
 
     failure=False
     success=False
@@ -23,6 +24,7 @@ def backtracking(s, target):
         
 
         if generation_rule != 0:
+            contadorPercorridos=contadorPercorridos+1
             n = new_node
 
             if n.is_solution(target):
@@ -48,3 +50,10 @@ def backtracking(s, target):
                 
         print("---------------------------------")
         print()
+    print("NOS VISITADOS = "+str(contadorPercorridos))
+    maior=0
+    for x in g._vertices:
+        if(x.get_depth()):
+            maior=x.get_depth()
+    
+    print("PROFUNDIDADE = "+str(maior))

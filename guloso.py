@@ -16,7 +16,8 @@ def guloso(s,target):
     failure=False
     success=False
     abertos = []
-    
+    contadorAbertos=0
+    contadorFechados=0
     fechados=[]
     vazios=[]
     
@@ -56,12 +57,12 @@ def guloso(s,target):
                     u.control_strategy(operator,i)
                     ##MUDAR PARA INSERT NODE. PARA PERMITIR NOS IGUAIS NO MESMO NIVEL
                     if(g.try_insert_node(u,"R"+str(i)+str(operator))):
-                        
+                        u.set_depth(n)
+                        contadorAbertos=contadorAbertos+1
                         abertos.append(u)
                         g.print_graph()
                        
-                        operator=1
-                        continue 
+                        
                       
                     if operator == 4:
                         operator = 0
@@ -71,7 +72,15 @@ def guloso(s,target):
                 
                                         
                 fechados.append(n)
+                contadorFechados=contadorFechados+1
                 del n
         print("---------------------------------")
         print()
-
+    print("NOS ABERTOS = "+str(contadorAbertos))
+    print("NOS FECHADOS = "+str(contadorFechados))
+    maior=0
+    for x in g._vertices:
+        if(x.get_depth()):
+            maior=x.get_depth()
+    
+    print("PROFUNDIDADE = "+str(maior))

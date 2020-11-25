@@ -91,7 +91,7 @@ class Edge:
     def print_edge(self):
         if self._origin is None:
             return f"{self._generating_rule}: |-> {self._destiny.get_node_state()}"
-        return f"{self._generating_rule}: {self._origin.get_node_state()} -> {self._destiny.get_node_state()}"
+        return f"{self._generating_rule}: {self._origin.get_node_state()} -> {self._destiny.get_node_state()} | {self._destiny.get_weight()}"
 
 
 class Node:
@@ -112,6 +112,8 @@ class Node:
         self._jug_arr = jug_arr
         self._heuristic=0
         self._weight=0
+        self._depth=0
+        
         
 
     def get_heuristic(self):
@@ -122,24 +124,29 @@ class Node:
             
         return self._heuristic
     
+    def get_depth(self):
+        
+        return self._depth
+    
+    def set_depth(self,parentNode):
+        
+        self._depth=1+(parentNode.get_depth())
+    
+    
     def get_weight(self):
 
         return self._weight
     
-    def set_weight(self,parentNode,solution):
-        self._weight=0
-        weightParent=0
+    def set_weight(self):
+        parentWeight=0
+        
         for x in self._jug_arr:
-            self._weight+=x.get_current_volume()-solution
-            
-        for y in parentNode._jug_arr:
-            weightParent+=y.get_current_volume()-solution
-            
-            
-        if(self._weight!=0):
-            self._weight+weightParent
+            self._weight+=x.get_current_volume()
+        
+        if(self._parent_node!=None):
+            self._weight=self._weight+self._parent_node.get_weight()
         else:
-            self.weight=0
+            self._weight=0
         
        
     
@@ -236,6 +243,7 @@ class Node:
                 
                 self.control_strategy(operator, i) 
                 g.try_insert_node(self,"R"+str(i)+str(operator))
+                self.set_depth(self.get_parent_node())
                 return operator
 
             if operator == 4:

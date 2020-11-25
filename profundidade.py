@@ -14,11 +14,13 @@ def profundidade(s,target):
     failure=False
     success=False
     abertos = []
+    contadorAbertos=0
+    contadorFechados=0
     
     fechados=[]
-    vazios=[]
     
-    
+    profundidade=0
+    maiorProfundidade=0
     abertos.append(n)
     
     while not (success or failure):
@@ -46,14 +48,17 @@ def profundidade(s,target):
                 while(i <= jug_arr_len):
                     u=copy.deepcopy(n)
                     u.control_strategy(operator,i)
-                    ##MUDAR PARA INSERT NODE. PARA PERMITIR NOS IGUAIS NO MESMO NIVEL
                     if(g.try_insert_node(u,"R"+str(i)+str(operator))):
                         
+                        u.set_depth(n)
                         abertos.append(u)
+                        contadorAbertos=contadorAbertos+1
+
                         g.print_graph()
                        
                         operator=1
-                        continue 
+                        
+                        break 
                       
                     if operator == 4:
                         operator = 0
@@ -63,7 +68,18 @@ def profundidade(s,target):
                 
                                         
                 fechados.append(n)
+                contadorFechados=contadorFechados+1
                 del n
 
         print("---------------------------------")
         print()
+    print("NOS ABERTOS = "+str(contadorAbertos))
+    print("NOS FECHADOS = "+str(contadorFechados))
+    maior=0
+    for x in g._vertices:
+        if(x.get_depth()):
+            maior=x.get_depth()
+    
+    print("PROFUNDIDADE = "+str(maior))
+            
+    

@@ -14,7 +14,8 @@ def ordenada(s,target):
     failure=False
     success=False
     abertos = []
-    
+    contadorAbertos=0
+    contadorFechados=0
     fechados=[]
     
     abertos.append(n)
@@ -43,7 +44,7 @@ def ordenada(s,target):
                 i=i+1
             abertos.remove(n)
             fechados.append(n)
-            
+            contadorFechados=contadorFechados+1
             if(n.is_solution(target)):
                 g.print_graph()
                 print("SOLUCAO")
@@ -66,9 +67,11 @@ def ordenada(s,target):
                             insert=False       
                         
                     if(insert):
-                        u.set_weight(n,target)
+                        u.set_weight()
+                        u.set_depth(n)
                         g.insert_node_LP(u,"R"+str(i)+str(operator))
                         abertos.append(u)
+                        contadorAbertos=contadorAbertos+1
                         g.print_graph()
                     
                     if operator == 4:
@@ -79,6 +82,20 @@ def ordenada(s,target):
                 
         print("---------------------------------")
         print()
+        
+    print("NOS ABERTOS = "+str(contadorAbertos))
+    print("NOS FECHADOS = "+str(contadorFechados))
+    maior=0
+    for x in g._vertices:
+        if(x.get_depth()):
+            maior=x.get_depth()
+            
+        if(x.is_solution(target)):
+            custo=x.get_weight()
+    
+    print("PROFUNDIDADE = "+str(maior))
+    print("CUSTO = "+str(custo))
 
+    
 
 
